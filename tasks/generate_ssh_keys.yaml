@@ -9,6 +9,7 @@
    size: 4096
    comment: "{{ ansible_env.USER }}@helper"
    state: present
+  register: ocp_helper_keypair
 
 - blockinfile:
     path: "{{ ansible_env.HOME }}/.ssh/config"

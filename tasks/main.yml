@@ -2,6 +2,8 @@
 # Setup OCP4 Helper Node
 
 - hosts: all
+  vars:
+    ocp_pull_secret: "{{ lookup('file', '{{ ansible_env.HOME }}/.openshift/pull-secret') }}"
   vars_files:
     - ../vars/main.yml
   handlers:
@@ -37,6 +39,17 @@
       name: "{{ syslinuxpkgs }}"
       state: present
     when: not staticips and not ppc64le
+
+  - name: Create "{{ dns.clusterid }}" "install-config directory
+    file:
+      path: "../../{{ dns.clusterid }}"
+      state: directory
+      mode: 0755
+
+  - name: Write out install-config.yaml 
+    template:
+      src: ../templates/install-config.yaml.j2
+      dest: "../../{{ dns.clusterid }}/install-config.yaml"
 
   - name: Write out dhcp file
     template:
@@ -112,15 +125,22 @@
       - "/usr/local/src/openshift-client-linux.tar.gz"
       - "/usr/local/src/openshift-install-linux.tar.gz"
       - "/var/www/html/install/bios.raw.gz"
-      - "/var/lib/tftpboot/rhcos/initramfs.img"
-      - "/var/lib/tftpboot/rhcos/kernel"
+      - "/var/lib/tftpboot/{{ ocp_coreos_dist }}/initramfs.img"
+      - "/var/lib/tftpboot/{{ ocp_coreos_dist }}/kernel"
     when: force_ocp_download
 
   - name: Downloading OCP4 installer Bios
     get_url:
-      url: "{{ ocp_bios}}"
+      url: "{{ ocp_bios }}"
       dest: /var/www/html/install/bios.raw.gz
       mode: 0555
+      
+  - name: Downloading OCP4 installer Bios sig
+    get_url:
+      url: "{{ ocp_bios_sig }}"
+      dest: /var/www/html/install/bios.raw.gz.sig
+      mode: 0555
+    when: ocp_coreos_dist == "fcos"
       
   - name: Start firewalld service
     systemd:
@@ -191,7 +211,7 @@
 
   - name: Create TFTP RHCOS dir
     file:
-      path: /var/lib/tftpboot/rhcos
+      path: "/var/lib/tftpboot/{{ ocp_coreos_dist }}"
       state: directory
       mode: 0755
     when: not staticips
@@ -211,14 +231,14 @@
   - name: Downloading OCP4 installer initramfs
     get_url:
       url: "{{ ocp_initramfs }}"
-      dest: /var/lib/tftpboot/rhcos/initramfs.img
+      dest: "/var/lib/tftpboot/{{ ocp_coreos_dist }}/initramfs.img"
       mode: 0555
     when: not staticips
 
   - name: Downloading OCP4 installer kernel
     get_url:
       url: "{{ ocp_install_kernel }}"
-      dest: /var/lib/tftpboot/rhcos/kernel
+      dest: "/var/lib/tftpboot/{{ ocp_coreos_dist }}/kernel"
       mode: 0555
     when: not staticips
 
