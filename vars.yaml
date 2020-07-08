@@ -1,7 +1,7 @@
 ---
 disk: vda
 helper:
-  name: "bastion"
+  name: "nuc"
   ipaddr: "192.168.222.210"
 dns:
   domain: "glenn4u.com"
@@ -19,24 +19,24 @@ dhcp:
 bootstrap:
   name: "bootstrap"
   ipaddr: "192.168.222.20"
-  macaddr: "52:54:00:a5:64:84"
+  macaddr: "52:54:00:64:5a:0b"
 masters:
   - name: "master0"
     ipaddr: "192.168.222.21"
-    macaddr: "52:54:00:9b:27:a6"
+    macaddr: "52:54:00:80:c6:c2"
   - name: "master1"
     ipaddr: "192.168.222.22"
-    macaddr: "52:54:00:6e:9a:cb"
+    macaddr: "52:54:00:b2:37:8d"
   - name: "master2"
     ipaddr: "192.168.222.23"
-    macaddr: "52:54:00:a5:8d:80"
+    macaddr: "52:54:00:2b:2f:36"
 workers:
   - name: "worker0"
     ipaddr: "192.168.222.11"
-    macaddr: "52:54:00:ba:fa:39"
+    macaddr: "52:54:00:ec:2e:ea"
   - name: "worker1"
     ipaddr: "192.168.222.12"
-    macaddr: "52:54:00:cb:45:1f"
+    macaddr: "52:54:00:fe:b8:2e"
 ocp_coreos_dist: "fcos"
 ocp_bios: "https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/32.20200629.2.0/x86_64/fedora-coreos-32.20200629.2.0-metal.x86_64.raw.xz"
 ocp_bios_sig: "https://builds.coreos.fedoraproject.org/prod/streams/testing/builds/32.20200629.2.0/x86_64/fedora-coreos-32.20200629.2.0-metal.x86_64.raw.xz.sig"

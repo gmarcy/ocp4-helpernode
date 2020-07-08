@@ -19,5 +19,5 @@ networking:
   - 172.30.0.0/16
 platform:
   none: {}
-pullSecret: '{{ ocp_pull_secret }}"
-sshKey: '{{ ocp_helper_keypair.public_key }}'
+pullSecret: '{{ ocp_pull_secret }}'
+sshKey: '{{ ocp_helper_keypair.public_key }} {{ ocp_helper_keypair.comment }}'

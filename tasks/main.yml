@@ -3,7 +3,7 @@
 
 - hosts: all
   vars:
-    ocp_pull_secret: "{{ lookup('file', '{{ ansible_env.HOME }}/.openshift/pull-secret') }}"
+    ocp_pull_secret: '{{ lookup("file", "{{ ansible_env.HOME }}/.openshift/pull-secret") | string }}'
   vars_files:
     - ../vars/main.yml
   handlers:
@@ -40,7 +40,7 @@
       state: present
     when: not staticips and not ppc64le
 
-  - name: Create "{{ dns.clusterid }}" "install-config directory
+  - name: Create "{{ dns.clusterid }}" install-config directory
     file:
       path: "../../{{ dns.clusterid }}"
       state: directory

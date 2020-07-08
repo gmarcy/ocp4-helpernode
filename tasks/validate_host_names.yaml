@@ -1,8 +1,9 @@
 - fail:
     msg: "Please revise your vars.yaml file invalid characters in hostnames"
-  when: item is search('{{ chars }}')
+  when: item is search(chars)
   with_items:
   - "{{ dns.domain }}"
+  - "{{ dns.clusterid }}"
   - "{{ helper.name }}"
   - "{{ bootstrap.name }}"
   register: val0
@@ -10,7 +11,7 @@
 
 - fail:
     msg: "Please revise your vars.yaml file invalid characters in hostnames"
-  when: item.name is search('{{ chars }}')
+  when: item.name is search(chars)
   with_items:
   - "{{ masters }}"
   - "{{ workers }}"

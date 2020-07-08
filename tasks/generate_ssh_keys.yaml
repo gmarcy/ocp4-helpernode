@@ -25,6 +25,9 @@
       Host {{ item.name }}.{{ dns.clusterid }}.{{ dns.domain }}
         User core
         IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
+      Host {{ item.ipaddr }}
+        User core
+        IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
   loop: "{{ masters + workers }}"
 
 - blockinfile:
@@ -39,6 +42,9 @@
         User core
         IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
       Host {{ item.name }}.{{ dns.clusterid }}.{{ dns.domain }}
+        User core
+        IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
+      Host {{ bootstrap.ipaddr }}
         User core
         IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
   loop: 
