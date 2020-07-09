@@ -134,14 +134,14 @@
       url: "{{ ocp_bios }}"
       dest: /var/www/html/install/bios.raw.gz
       mode: 0555
-      
+
   - name: Downloading OCP4 installer Bios sig
     get_url:
       url: "{{ ocp_bios_sig }}"
       dest: /var/www/html/install/bios.raw.gz.sig
       mode: 0555
     when: ocp_coreos_dist == "fcos"
-      
+
   - name: Start firewalld service
     systemd:
       name: firewalld
