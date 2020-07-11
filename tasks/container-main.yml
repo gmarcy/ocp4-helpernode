@@ -55,16 +55,12 @@
     template:
       src: ../templates/dhcpd.conf.j2
       dest: /etc/dhcp/dhcpd.conf
-    notify:
-      - restart dhcpd
     when: not staticips
 
   - name: Write out named file
     template:
       src: ../templates/named.conf.j2
       dest: /etc/named.conf
-    notify:
-      - restart bind
 
   - name: Installing DNS Serialnumber generator
     copy:
@@ -84,29 +80,21 @@
     template:
       src: ../templates/zonefile.j2
       dest: /var/named/zonefile.db
-    notify:
-      - restart bind
   
   - name: Write out reverse zone file
     template:
       src: ../templates/reverse.j2
       dest: /var/named/reverse.db
-    notify:
-      - restart bind
   
   - name: Write out haproxy config file
     template:
       src: ../templates/haproxy.cfg.j2
       dest: /etc/haproxy/haproxy.cfg
-    notify:
-      - restart haproxy
 
   - name: Copy httpd conf file
     copy:
       src: ../files/httpd.conf
       dest: /etc/httpd/conf/httpd.conf
-    notify:
-      - restart httpd
 
   - name: Create apache directories for installing
     file:
@@ -149,23 +137,17 @@
       mode: 0777
       owner: "{{ owner }}"
       group: "{{ group }}"
-    notify:
-      - restart nfs
 
   - name: Copy NFS export conf file
     copy:
       src: ../files/nfs-exports
       dest: /etc/exports
-    notify:
-      - restart nfs
 
   - name: Create TFTP config
     file:
       path: /var/lib/tftpboot/pxelinux.cfg
       state: directory
       mode: 0755
-    notify:
-      - restart tftp
     when: not staticips and not ppc64le
 
   - name: generate netboot entry for grub2
@@ -204,16 +186,12 @@
         src: ../templates/default.j2
         dest: /var/lib/tftpboot/pxelinux.cfg/default
         mode: 0555
-      notify:
-        - restart tftp
 
     - name: Set the bootstrap specific tftp file
       template:
         src: ../templates/pxe-bootstrap.j2
         dest: "/var/lib/tftpboot/pxelinux.cfg/01-{{ bootstrap.macaddr | regex_replace (':', '-')}}"
         mode: 0555
-      notify:
-        - restart tftp
 
     - name: Set the master specific tftp files
       template:
@@ -221,8 +199,6 @@
         dest: "/var/lib/tftpboot/pxelinux.cfg/01-{{ item.macaddr | regex_replace (':', '-')}}"
         mode: 0555
       with_items: "{{ masters | lower }}"
-      notify:
-        - restart tftp
 
     - name: Set the worker specific tftp files
       template:
@@ -230,8 +206,6 @@
         dest: "/var/lib/tftpboot/pxelinux.cfg/01-{{ item.macaddr | regex_replace (':', '-')}}"
         mode: 0555
       with_items: "{{ workers | lower }}"
-      notify:
-        - restart tftp
     when: not staticips and not ppc64le
 
   - name: Generate grub2 config files
