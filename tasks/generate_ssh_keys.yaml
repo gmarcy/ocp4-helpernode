@@ -9,6 +9,7 @@
    size: 4096
    comment: "{{ ansible_env.USER }}@helper"
    state: present
+  register: ocp_helper_keypair
 
 - blockinfile:
     path: "{{ ansible_env.HOME }}/.ssh/config"
@@ -22,6 +23,9 @@
         User core
         IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
       Host {{ item.name }}.{{ dns.clusterid }}.{{ dns.domain }}
+        User core
+        IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
+      Host {{ item.ipaddr }}
         User core
         IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
   loop: "{{ masters + workers }}"
@@ -38,6 +42,9 @@
         User core
         IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
       Host {{ item.name }}.{{ dns.clusterid }}.{{ dns.domain }}
+        User core
+        IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
+      Host {{ bootstrap.ipaddr }}
         User core
         IdentityFile {{ ansible_env.HOME }}/.ssh/helper_rsa
   loop: 
