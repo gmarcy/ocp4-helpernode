@@ -6,6 +6,6 @@ default menu.c32
  label 1
  menu label ^1) Install Master Node
  menu default
- kernel rhcos/kernel
- append initrd=rhcos/initramfs.img nomodeset rd.neednet=1 ip=dhcp coreos.inst=yes coreos.inst.install_dev={{ disk }} coreos.inst.image_url=http://{{ helper.ipaddr }}:8080/install/bios.raw.gz coreos.inst.ignition_url=http://{{ helper.ipaddr }}:8080/ignition/master.ign
+ kernel {{ ocp_coreos_dist }}/kernel
+ append initrd={{ ocp_coreos_dist }}/initramfs.img nomodeset rd.neednet=1 ip=dhcp coreos.inst=yes coreos.inst.install_dev={{ disk }} coreos.inst.image_url=http://{{ helper.ipaddr }}:8080/install/bios.raw.gz coreos.inst.ignition_url=http://{{ helper.ipaddr }}:8080/ignition/master.ign
 

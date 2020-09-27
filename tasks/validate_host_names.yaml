@@ -1,9 +1,10 @@
 - name: Validate values for DNS compatibility
   fail:
     msg: "Please revise your vars.yaml file. Invalid characters found in hostnames"
-  when: item is search('{{ chars }}')
+  when: item is search(chars)
   with_items:
   - "{{ dns.domain }}"
+  - "{{ dns.clusterid }}"
   - "{{ helper.name }}"
   - "{{ bootstrap.name }}"
   - "{{ masters }}"
